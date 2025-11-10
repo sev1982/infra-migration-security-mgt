@@ -1,9 +1,14 @@
-terraform {
-  backend "s3" {
-    bucket         = "infra-migration-tfstate"
-    key            = "aws/terraform.tfstate"
-    region         = "us-east-1"
-    dynamodb_table = "terraform-locks"
-    encrypt        = true
+# ----------------------------
+# S3 Bucket for Terraform State
+# ----------------------------
+resource "aws_s3_bucket" "tf_state" {
+  bucket = "infra-migration-tfstate-${random_id.bucket_id.hex}"
+
+  tags = {
+    Name = "infra-migration-tfstate"
   }
+}
+
+resource "random_id" "bucket_id" {
+  byte_length = 4
 }

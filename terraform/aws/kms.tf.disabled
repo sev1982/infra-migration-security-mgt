@@ -1,0 +1,24 @@
+# ----------------------------
+# KMS Key for Encryption
+# ----------------------------
+resource "aws_kms_key" "tf_state_key" {
+  description             = "KMS key for Terraform S3 backend encryption"
+  deletion_window_in_days = 10
+  enable_key_rotation     = true
+
+  tags = {
+    Name = "tfstate-encryption-key"
+  }
+}
+
+# Apply encryption to S3 bucket
+resource "aws_s3_bucket_server_side_encryption_configuration" "tf_s3_enc" {
+  bucket = aws_s3_bucket.tf_state.id
+
+  rule {
+    apply_server_side_encryption_by_default {
+      kms_master_key_id = aws_kms_key.tf_state_key.arn
+      sse_algorithm     = "aws:kms"
+    }
+  }
+}

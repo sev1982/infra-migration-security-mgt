@@ -88,6 +88,41 @@ infra-migration-security-mgt/
 
 ---
 
+# Day 2 — Terraform: Basic AWS Infrastructure Deployment
+
+## Goal
+Deploy a minimal but functional AWS environment using Terraform:
+- VPC with a public subnet
+- Internet Gateway and route table
+- One EC2 instance (Apache web server) using `user_data`
+- Security Group restricting access
+- Terraform remote state stored in S3 with DynamoDB locking
+
+## Files in this folder
+- `provider.tf`      : AWS provider configuration
+- `backend.tf`       : Terraform S3 backend configuration (remote state)
+- `main.tf`          : VPC, subnet, IGW, route table, security group, EC2 resource
+- `variables.tf`     : Variables used by the configuration
+- `outputs.tf`       : Useful outputs (instance public IP, VPC ID, etc.)
+- `user_data.sh`     : Bootstrapping script for the EC2 instance
+- `README-day2.md`   : This file
+
+## Prerequisites
+- AWS account and AWS CLI configured (`aws configure`)
+- Terraform installed (>= 1.4.0 recommended)
+- S3 bucket and DynamoDB table created for the Terraform backend:
+  - S3 bucket name: `infra-migration-tfstate`
+  - DynamoDB table name: `terraform-lock`
+
+You can create them manually or run the `scripts/setup_backend.sh` script.
+
+## Quick start
+1. Initialize Terraform (uses S3 backend defined in `backend.tf`):
+   ```bash
+   cd terraform
+   terraform init -reconfigure
+
+
 ## 💼 Author
 **Séverin Kouemo**  
 Cloud & DevOps Enthusiast | AWS Solution Architect (in progress)  
