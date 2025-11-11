@@ -32,6 +32,17 @@ resource "aws_subnet" "public_subnet" {
   }
 }
 
+resource "aws_subnet" "public_subnet_b" {
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = "10.0.2.0/24"
+  map_public_ip_on_launch = true
+  availability_zone       = "us-east-1b"
+
+  tags = {
+    Name = "public-subnet_b"
+  }
+}
+
 # ----------------------------
 # Internet Gateway
 # ----------------------------
@@ -155,8 +166,10 @@ resource "aws_lb" "web_lb" {
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.lb_sg.id]
-  subnets            = [aws_subnet.public_subnet.id]
-
+  subnets            = [
+  aws_subnet.public_subnet.id,
+  aws_subnet.public_subnet_b.id
+]
   tags = {
     Name = "web-lb"
   }

@@ -1,14 +1,8 @@
-# ----------------------------
-# S3 Bucket for Terraform State
-# ----------------------------
-resource "aws_s3_bucket" "tf_state" {
-  bucket = "infra-migration-tfstate-${random_id.bucket_id.hex}"
-
-  tags = {
-    Name = "infra-migration-tfstate"
+terraform {
+  backend "s3" {
+    bucket         = "infra-migration-tfstate-8b39bb45" # Remplace par ton nom généré
+    key            = "aws/terraform.tfstate"
+    region         = "us-east-1"
+    encrypt        = true
   }
-}
-
-resource "random_id" "bucket_id" {
-  byte_length = 4
 }
