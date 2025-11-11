@@ -166,10 +166,10 @@ resource "aws_lb" "web_lb" {
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.lb_sg.id]
-  subnets            = [
-  aws_subnet.public_subnet.id,
-  aws_subnet.public_subnet_b.id
-]
+  subnets = [
+    aws_subnet.public_subnet.id,
+    aws_subnet.public_subnet_b.id
+  ]
   tags = {
     Name = "web-lb"
   }
@@ -226,6 +226,6 @@ resource "aws_lb_listener" "web_listener" {
 # Output
 # ----------------------------
 output "lb_dns_name" {
-  value = aws_lb.web_lb.dns_name
+  value       = aws_lb.web_lb.dns_name
   description = "Access the web server via this Load Balancer DNS"
 }
