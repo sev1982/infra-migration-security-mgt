@@ -1,0 +1,32 @@
+terraform {
+  required_version = ">= 1.6"
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+  }
+}
+
+provider "aws" {
+  region = var.region
+}
+
+module "backend_s3" {
+  source = "./modules/backend_s3"
+
+  bucket_name = var.bucket_name
+  env         = var.env
+  kms_key_arn = var.kms_key_arn
+}
+
+module "backend_dynamodb" {
+  source = "./modules/backend_dynamodb"
+
+  table_name = var.dynamodb_table
+  env        = var.env
+}
+
+terraform {
+  backend "s3" {}
+}

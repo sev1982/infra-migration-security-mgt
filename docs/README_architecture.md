@@ -57,6 +57,8 @@ The project will be deployed in **two environments** (AWS and Azure) to simulate
 ---
 
 ## 🧪 Project Structure
+
+
 infra-migration-security-mgt/
 │
 ├── terraform/
@@ -105,7 +107,7 @@ Deploy a minimal but functional AWS environment using Terraform:
 - `variables.tf`     : Variables used by the configuration
 - `outputs.tf`       : Useful outputs (instance public IP, VPC ID, etc.)
 - `user_data.sh`     : Bootstrapping script for the EC2 instance
-- `README-day2.md`   : This file
+- `README-day7.md`   : This file
 
 ## Prerequisites
 - AWS account and AWS CLI configured (`aws configure`)
@@ -114,7 +116,153 @@ Deploy a minimal but functional AWS environment using Terraform:
   - S3 bucket name: `infra-migration-tfstate`
   - DynamoDB table name: `terraform-lock`
 
-You can create them manually or run the `scripts/setup_backend.sh` script.
+# Day 6 - 7 — Terraform: AWS Scalable Web Architecture (Dev & Prod Environments)
+
+Terraform – AWS Scalable Web Architecture (Dev & Prod Environments)
+
+This project deploys a complete scalable and highly available web architecture on AWS using Terraform.
+It includes:
+
+VPC + subnets (public/private)
+
+Internet Gateway & NAT Gateway
+
+Application Load Balancer (ALB)
+
+Auto Scaling Group (ASG)
+
+Launch Template
+
+User Data automation (NGINX)
+
+EC2 instances in private subnets
+
+S3 backend (optional)
+
+DynamoDB state locking (optional)
+
+Environment-based configuration (dev and prod)
+
+📌 Architecture Diagram
+
+![Architecture Diagram](sandbox:/mnt/data/A_digital_diagram_depicts_an_Amazon_Web_Services_(.png)
+
+
+🚀 Deployment Instructions
+1. Initialize Terraform
+
+For the dev environment:
+
+terraform init -reconfigure \
+  -backend-config="backend-dev.conf" \
+  -var-file="env/dev.tfvars"
+
+
+For prod:
+
+terraform init -reconfigure \
+  -backend-config="backend-prod.conf" \
+  -var-file="env/prod.tfvars"
+
+2. Plan the infrastructure
+
+Dev:
+
+terraform plan -var-file="env/dev.tfvars"
+
+
+Prod:
+
+terraform plan -var-file="env/prod.tfvars"
+
+3. Apply the infrastructure
+
+Dev:
+
+terraform apply -var-file="env/dev.tfvars" --auto-approve
+
+
+Prod:
+
+terraform apply -var-file="env/prod.tfvars" --auto-approve
+
+🧩 Key Features
+✔️ Application Load Balancer
+
+Public access on port 80
+
+Routes traffic to EC2 instances
+
+Health checks for automatic detection of unhealthy instances
+
+✔️ Auto Scaling Group
+
+Launches EC2 instances in private subnets
+
+Automatically replaces unhealthy instances
+
+Horizontal scaling capabilities
+
+✔️ Launch Template
+
+AMI ID and instance type
+
+Security group
+
+Automated NGINX setup using user_data.sh
+
+Dynamic environment-based homepage
+
+✔️ Secure Network Architecture
+
+Public subnets: ALB only
+
+Private subnets: EC2 only
+
+NAT Gateway for outbound traffic
+
+📝 Environment Variables
+
+Example dev.tfvars:
+
+env = "dev"
+instance_type = "t3.micro"
+ami_id        = "ami-xxxxxxxx"
+
+
+Example prod.tfvars:
+
+env = "prod"
+instance_type = "t3.micro"
+ami_id        = "ami-xxxxxxxx"
+
+📦 Outputs
+
+This project exports:
+
+ALB DNS name
+
+Private subnets
+
+VPC ID
+
+ASG name
+
+Target group ARN
+
+Instance security group ID
+======================================================================
+📚 Next Steps
+======================================================================
+Add RDS (MySQL/PostgreSQL)
+
+Add S3 website hosting
+
+Implement CloudWatch monitoring
+
+Add CI/CD pipeline (GitHub Actions + Terraform)
+
+Add KMS for encryption
 
 ## Quick start
 1. Initialize Terraform (uses S3 backend defined in `backend.tf`):

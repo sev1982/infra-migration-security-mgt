@@ -1,0 +1,19 @@
+###############################################
+#   STATE BACKEND - S3 + DYNAMODB
+###############################################
+
+module "backend_s3" {
+  source = "./modules/backend_s3"
+
+  bucket_name = var.bucket_name
+  env         = var.env
+  kms_key_arn = var.kms_key_arn
+}
+
+module "backend_dynamodb" {
+  source = "./modules/backend_dynamodb"
+
+  table_name = var.dynamodb_table
+  env        = var.env
+}
+
